@@ -5,7 +5,7 @@ def calculate_risk(extracted: dict, message: str) -> dict:
     msg = message.lower()
 
     if extracted.get("upi_ids"):
-        score += 3
+        score += 4
         reasons.append("UPI ID detected")
 
     if extracted.get("phone_numbers"):
@@ -15,6 +15,9 @@ def calculate_risk(extracted: dict, message: str) -> dict:
     if extracted.get("bank_accounts"):
         score += 4
         reasons.append("Bank account detected")
+    if extracted.get("phishing_links"):
+        score += 5
+        reasons.append("Phishing link detected")
 
     keywords = ["send money", "otp", "kyc", "verify", "urgent"]
     for k in keywords:

@@ -1,7 +1,7 @@
 from typing import List
 from backend.api.schemas import ConversationItem, FinalResponse, ExtractedData
 from backend.extraction.extractor import extract_entities
-from backend.api.detector import detect_scam
+from backend.extraction.detector import detect_scam
 from backend.api.gemini_client import generate_reply
 
 

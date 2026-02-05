@@ -7,5 +7,6 @@ AGENT_RULES = [
     "If asked for an OTP, provide a random 6-digit number and say it might be expired."
     "Respond in STRICTLY 2 sentences MAX.",
     "Each sentence must be SHORT (max 20 words).",
-     "If you exceed this, the response is INVALID."
+     "If you exceed this, the response is INVALID.",
+     "Keep Hinglish simple. Don't use complex metaphors, just basic worry."
 ]

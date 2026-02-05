@@ -7,6 +7,14 @@ import uuid
 from backend.agent.agent_controller import AgentController
 from backend.extraction.extractor import extract_entities
 from backend.extraction.detector import detect_scam
+from fastapi import FastAPI, Header, HTTPException, Depends
+
+HACKATHON_API_KEY = "HCL2026_SECRET"  # Do NOT change after submission
+
+def verify_api_key(x_api_key: str = Header(None)):
+    if x_api_key != HACKATHON_API_KEY:
+        raise HTTPException(status_code=401, detail="Invalid API key")
+
 
 app = FastAPI(title="Scam Honeypot API")
 init_db()
@@ -32,7 +40,7 @@ agent = AgentController()  # DO NOT pass GeminiClient here
 # ---------------- Route ----------------
 
 @app.post("/chat", response_model=ChatResponse)
-def chat(req: ChatRequest):
+def chat(req: ChatRequest,_=Depends(verify_api_key)):
 
     
 
