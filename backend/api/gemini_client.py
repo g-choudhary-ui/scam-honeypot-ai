@@ -14,22 +14,21 @@ class GeminiClient:
         self.model = genai.GenerativeModel(MODEL_NAME)
 
     def generate(self, prompt: str) -> str:
-     response = self.client.models.generate_content(
-        model=MODEL_NAME,
-        contents=prompt
-    )
+        response = self.model.generate_content(prompt)
 
-     text = response.text.strip()
+        text = response.text.strip()
 
     # HARD ENFORCEMENT
-     sentences = text.split(".")
-     sentences = sentences[:2]
+        sentences = text.split(".")
+        sentences = sentences[:2]
 
-     short_sentences = []
-     for s in sentences:
-        words = s.split()
-        short_sentences.append(" ".join(words[:20]))
+        short_sentences = []
+        for s in sentences:
+            words = s.split()
+            short_sentences.append(" ".join(words[:20]))
+
         return ". ".join(short_sentences).strip()
+
 
 
 def generate_reply(persona: str, goal: str, scammer_message: str) -> str:
