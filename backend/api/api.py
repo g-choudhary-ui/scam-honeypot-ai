@@ -21,8 +21,10 @@ init_db()
 # ---------------- Schemas ----------------
 
 class ChatRequest(BaseModel):
-    message: str
-conversation_id: Optional[str] = None
+    message: Optional[str] = None
+    content: Optional[str] = None
+    conversation_id: Optional[str] = None
+
 
 class ChatResponse(BaseModel):
     reply: str
