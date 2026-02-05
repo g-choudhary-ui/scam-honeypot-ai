@@ -25,6 +25,8 @@ class ChatRequest(BaseModel):
     content: Optional[str] = None
     conversation_id: Optional[str] = None
 
+class Config:
+        extra = "allow"
 
 class ChatResponse(BaseModel):
     reply: str
@@ -44,13 +46,18 @@ agent = AgentController()  # DO NOT pass GeminiClient here
 @app.post("/chat", response_model=ChatResponse)
 def chat(req: ChatRequest,_=Depends(verify_api_key)):
 
+     # 🔥 Normalize tester + swagger input
+    user_message = req.message or req.content
+
+    if not user_message:
+        raise HTTPException(status_code=400, detail="No message provided")
     
 
     # 1. Entity extraction
-    extracted = extract_entities(req.message)
+    extracted = extract_entities(user_message)
 
     # 2. Scam detection
-    detection = detect_scam(req.message, extracted)
+    detection = detect_scam(user_message, extracted)
 
     if not detection:
         detection = {
@@ -68,14 +75,14 @@ def chat(req: ChatRequest,_=Depends(verify_api_key)):
             "extracted": extracted,
             "detection": detection,
             "evidence": {
-                "message": req.message,
+                "message": user_message,
                 "entities": extracted,
                 "reasons": detection["reasons"]
             }
         }
 
     # 4. Normal Gemini reply (NO TRY)
-    reply = agent.generate_reply(req.message)
+    reply = agent.generate_reply(user_message)
 
     return {
         "reply": reply,
