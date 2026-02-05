@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 from typing import Optional
-
+from pydantic import BaseModel, ConfigDict
 from backend.storage.database import init_db, save_message, get_last_messages
 import uuid
 from backend.agent.agent_controller import AgentController
@@ -25,9 +25,7 @@ class ChatRequest(BaseModel):
     content: Optional[str] = None
     conversation_id: Optional[str] = None
 
-class Config:
-        extra = "allow"
-
+model_config = ConfigDict(extra="allow")
 class ChatResponse(BaseModel):
     reply: str
     stop_chat: bool
