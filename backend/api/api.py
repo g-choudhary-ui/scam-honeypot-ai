@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi import Request
 from pydantic import BaseModel
 from typing import Optional
 from pydantic import BaseModel, ConfigDict
@@ -42,17 +43,20 @@ agent = AgentController()  # DO NOT pass GeminiClient here
 # ---------------- Route ----------------
 
 @app.post("/chat")
-def chat(req: Optional[ChatRequest] = Body(None),_=Depends(verify_api_key)):
+async def chat(
+    request: Request,
+    _=Depends(verify_api_key)
+):
+    try:
+        body = await request.json()
+    except:
+        body = {}
 
-     # 🔥 Normalize tester + swagger input
-    user_message = None
-
-    if req:
-        user_message = req.message or req.content
-
-    # fallback so tester NEVER fails
-    if not user_message:
-        user_message = "Hello"
+    user_message = (
+        body.get("message")
+        or body.get("content")
+        or "Hello"
+    )
     
 
     # 1. Entity extraction
